@@ -10,8 +10,8 @@ As 3 partes ou os 3 sistemas :
 3 - Angular Web parte administrativa
 
 
-# WebService-agroinvest
-Web Service for the system AGROINVEST, it's a work class at University. 
+# WebService-agroinvest English
+Web Service for the system AGROINVEST, it's a work class of the University. 
 
 The tecnology of project AGROINVEST is the MicroServices.
 It are 3 systems for the project :

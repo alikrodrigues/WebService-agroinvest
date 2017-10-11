@@ -31,12 +31,14 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
 import br.com.agroinvest.model.Periodo;
+import br.com.agroinvest.util.ConversorXml;
 
 @Stateless
 @Path("/import")
 public class ImportaEndpoint {
 	@PersistenceContext(unitName = "ws-agroinvest-persistence-unit")
 	private EntityManager em;
+	private ConversorXml conversor;
 	
 	public static final String UPLOAD_FILE_SERVER = "/opt/AGROINVEST/upload/";
 	
@@ -69,6 +71,12 @@ public class ImportaEndpoint {
 					inputStream.close();
 				}
 			}
+		conversor = new ConversorXml(new File(UPLOAD_FILE_SERVER+fileName),new File(UPLOAD_FILE_SERVER+"convertido.csv"));
+		String retorno = conversor.ConvertXls();
+		
+		if(retorno==null)return Response.ok("File uploaded unsuccessfully at ").build();
+		else return Response.ok(retorno).build();
+		
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} finally {
@@ -153,59 +161,5 @@ public class ImportaEndpoint {
 		return true;
 	}
 
-	static void ConvertXls(File inputFile, File outputFile) {
-		// For storing data into CSV files
-		StringBuffer data = new StringBuffer();
-		try {
-			FileOutputStream fos = new FileOutputStream(outputFile);
-
-			// Get the workbook object for XLS file
-			HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(inputFile));
-			// Get first sheet from the workbook
-			HSSFSheet sheet = workbook.getSheetAt(0);
-			Cell cell;
-			Row row;
-
-			// Iterate through each rows from first sheet
-			Iterator<Row> rowIterator = sheet.iterator();
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
-				// For each row, iterate through each columns
-				Iterator<Cell> cellIterator = row.cellIterator();
-				while (cellIterator.hasNext()) {
-					cell = cellIterator.next();
-
-					switch (cell.getCellType()) {
-					case Cell.CELL_TYPE_BOOLEAN:
-						data.append(cell.getBooleanCellValue() + ",");
-						break;
-
-					case Cell.CELL_TYPE_NUMERIC:
-						data.append(cell.getNumericCellValue() + ",");
-						break;
-
-					case Cell.CELL_TYPE_STRING:
-						data.append(cell.getStringCellValue() + ",");
-						break;
-
-					case Cell.CELL_TYPE_BLANK:
-						data.append("" + ",");
-						break;
-
-					default:
-						data.append(cell + ",");
-					}
-
-					data.append('\n');
-				}
-			}
-
-			fos.write(data.toString().getBytes());
-			fos.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	
 }

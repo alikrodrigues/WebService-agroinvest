@@ -54,15 +54,11 @@ public class Insumo implements Serializable {
 	@Column(name = "v_sao_mig_oeste")
 	private BigDecimal valorSaoMiguelOeste;
 
-	@ManyToOne
-	@JoinColumn(name = "unidade_id")
-	@XmlJavaTypeAdapter(AdaptadorUnidadeMedida.class)
-	private UnidadeMedida unidade;
+	
+	private String unidade;
 
-	@ManyToOne
-	@JoinColumn(name = "categoria_id")
-	@XmlJavaTypeAdapter(AdaptadorCategoria.class)
-	private Categoria categoria;
+	
+	private String categoria;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "periodo_id")
@@ -181,19 +177,20 @@ public class Insumo implements Serializable {
 		return result;
 	}
 
-	public UnidadeMedida getUnidade() {
-		return this.unidade;
+	
+	public String getUnidade() {
+		return unidade;
 	}
 
-	public void setUnidade(final UnidadeMedida unidade) {
+	public void setUnidade(String unidade) {
 		this.unidade = unidade;
 	}
 
-	public Categoria getCategoria() {
-		return this.categoria;
+	public String getCategoria() {
+		return categoria;
 	}
 
-	public void setCategoria(final Categoria categoria) {
+	public void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
 

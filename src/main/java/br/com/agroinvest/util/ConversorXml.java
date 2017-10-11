@@ -152,6 +152,8 @@ public class ConversorXml {
 			auxiliar.remove(0);
 		}
 		localizador(auxiliar);
+		
+		
 		int diferenca = indexFrutas - indexAquicultura;
 		
 		 System.out.println("Aquicultura tem : "+diferenca/11+" insumos");
